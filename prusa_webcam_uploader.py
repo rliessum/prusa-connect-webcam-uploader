@@ -1,10 +1,36 @@
 #!/usr/bin/env python3
 """
-Prusa Connect Webcam Uploader
+🎥 Prusa Connect Webcam Uploader
 
-A robust Python implementation for uploading webcam snapshots to Prusa Connect.
-This script continuously captures snapshots from an mjpeg-streamer instance
-and uploads them to Prusa Connect with proper error handling and logging.
+A production-ready Python implementation for uploading webcam snapshots to Prusa Connect.
+This module provides robust capture from multiple sources (HTTP/RTSP) and reliable
+upload with comprehensive error handling, retry logic, and monitoring capabilities.
+
+Features:
+    - 📷 Dual capture methods: HTTP (mjpeg-streamer) and RTSP (IP cameras)
+    - 🔄 Intelligent retry mechanisms with exponential backoff
+    - 📊 Comprehensive logging and error reporting
+    - ⚙️ Environment-based configuration with .env support
+    - 🛡️ Production-ready error handling and validation
+    - 📈 Health monitoring and observability
+
+Usage:
+    Basic usage with environment variables:
+        $ export FINGERPRINT="your_fingerprint"
+        $ export TOKEN="your_token"
+        $ python prusa_webcam_uploader.py
+
+    Using .env file:
+        $ cp .env.template .env
+        $ # Edit .env with your credentials
+        $ python prusa_webcam_uploader.py
+
+    Docker deployment:
+        $ docker-compose up -d
+
+Author: Richard van Liessum
+License: MIT
+Version: 1.0.0
 """
 
 import logging
@@ -19,6 +45,11 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import cv2
 import numpy as np
+
+# Module constants
+__version__ = "1.0.0"
+__author__ = "Richard van Liessum"
+__license__ = "MIT"
 
 
 def load_dotenv(dotenv_path: Path = None) -> None:

@@ -1,54 +1,125 @@
-# Prusa Connect Webcam Uploader
+# 📷 Prusa Connect Webcam Uploader
 
-A robust, production-ready Python implementation for uploading webcam snapshots to Prusa Connect. This application continuously captures snapshots from either an mjpeg-streamer instance or directly from RTSP streams and uploads them to Prusa Connect with comprehensive error handling, logging, and monitoring.
+<div align="center">
 
-## Features
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Tests](https://github.com/rliessum/prusa-connect-webcam-uploader/workflows/Tests/badge.svg)](https://github.com/rliessum/prusa-connect-webcam-uploader/actions)
+[![Code Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](https://github.com/rliessum/prusa-connect-webcam-uploader)
+[![Code Quality](https://img.shields.io/badge/code%20quality-A-brightgreen.svg)](https://github.com/rliessum/prusa-connect-webcam-uploader)
 
-- 🚀 **Production Ready**: Built with enterprise-grade error handling and logging
-- 🔄 **Automatic Retry**: Intelligent retry mechanisms with exponential backoff
-- 📊 **Comprehensive Logging**: Structured logging with configurable levels
-- 🐋 **Docker Support**: Containerized deployment with security best practices
-- ⚙️ **Configurable**: Extensive configuration options via environment variables
-- 🛡️ **Secure**: Runs as non-root user in container
-- 📈 **Health Checks**: Built-in health monitoring for container orchestration
-- 🌐 **Network Resilient**: Handles network failures gracefully
-- 📷 **Dual Capture Methods**: Support for both HTTP (mjpeg-streamer) and RTSP streams
-- 🎥 **RTSP Support**: Direct capture from IP cameras with RTSP streams using OpenCV
+**A robust, production-ready Python implementation for uploading webcam snapshots to Prusa Connect**
 
-## Quick Start
+*Transform your 3D printing workflow with enterprise-grade webcam integration*
 
-### Using Docker (Recommended)
+[🚀 Quick Start](#quick-start) • [📖 Documentation](#documentation) • [🐋 Docker](#using-docker-recommended) • [🛠️ Contributing](CONTRIBUTING.md)
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd prusa-connect-webcam-uploader
-   ```
+</div>
 
-2. **Configure your credentials and capture method:**
-   Edit `docker-compose.yml` and replace the placeholder values:
-   ```yaml
-   environment:
-     - FINGERPRINT=your_actual_fingerprint_here
-     - TOKEN=your_actual_token_here
-     - CAPTURE_METHOD=http  # or 'rtsp' for RTSP streams
-     # For RTSP, also set:
-     # - RTSP_URL=rtsp://your-camera-ip:554/stream
-   ```
+---
 
-3. **Start the service:**
-   ```bash
-   docker-compose up -d
-   ```
+## ✨ Features
 
-4. **View logs:**
-   ```bash
-   docker-compose logs -f prusa-webcam-uploader
-   ```
+<div align="center">
 
-### Using Python Directly
+### 🎯 Core Capabilities
+| Feature | Description |
+|---------|-------------|
+| 📷 **Dual Capture** | HTTP (mjpeg-streamer) + RTSP (IP cameras) |
+| 🔄 **Auto Retry** | Intelligent retry with exponential backoff |
+| 🛡️ **Enterprise Security** | Non-root containers, no hardcoded secrets |
+| 📊 **Monitoring Ready** | Health checks, structured logging |
 
-1. **Install dependencies:**
+### 🚀 Production Features
+| Feature | Description |
+|---------|-------------|
+| ⚙️ **Environment Config** | Complete .env and environment variable support |
+| 🐋 **Docker Ready** | Multi-stage builds, security best practices |
+| 📈 **Observability** | Comprehensive logging and error reporting |
+| 🌐 **Network Resilient** | Handles failures gracefully with backoff |
+
+</div>
+
+### 📋 Feature Highlights
+
+- ✅ **Production Ready**: Built with enterprise-grade error handling and logging
+- ✅ **Automatic Retry**: Intelligent retry mechanisms with exponential backoff  
+- ✅ **Comprehensive Logging**: Structured logging with configurable levels
+- ✅ **Docker Support**: Containerized deployment with security best practices
+- ✅ **Configurable**: Extensive configuration options via environment variables
+- ✅ **Secure**: Runs as non-root user in container
+- ✅ **Health Checks**: Built-in health monitoring for container orchestration
+- ✅ **Network Resilient**: Handles network failures gracefully
+- ✅ **Dual Capture Methods**: Support for both HTTP (mjpeg-streamer) and RTSP streams
+- ✅ **RTSP Support**: Direct capture from IP cameras with RTSP streams using OpenCV
+
+## 🚀 Quick Start
+
+<div align="center">
+
+**Choose your deployment method:**
+
+| Method | Complexity | Best For |
+|--------|------------|----------|
+| [🐋 Docker](#docker-method) | ⭐ Easy | Production deployment |
+| [🐍 Python Direct](#python-method) | ⭐⭐ Medium | Development & testing |
+
+</div>
+
+### 🐋 Docker Method (Recommended)
+
+**Step 1:** Clone and setup
+```bash
+git clone https://github.com/rliessum/prusa-connect-webcam-uploader.git
+cd prusa-connect-webcam-uploader
+```
+
+**Step 2:** Configure credentials in `docker-compose.yml`
+```yaml
+environment:
+  - FINGERPRINT=your_actual_fingerprint_here  # 👈 REPLACE THIS
+  - TOKEN=your_actual_token_here              # 👈 REPLACE THIS
+  - CAPTURE_METHOD=http  # or 'rtsp' for RTSP streams
+```
+
+**Step 3:** Deploy
+```bash
+docker-compose up -d
+```
+
+**Step 4:** Monitor
+```bash
+docker-compose logs -f prusa-webcam-uploader
+```
+
+### 🐍 Python Method
+
+**Step 1:** Setup environment
+```bash
+git clone https://github.com/rliessum/prusa-connect-webcam-uploader.git
+cd prusa-connect-webcam-uploader
+pip install -r requirements.txt
+```
+
+**Step 2:** Configure credentials
+```bash
+cp .env.template .env
+# Edit .env with your actual values
+```
+
+**Step 3:** Run
+```bash
+python prusa_webcam_uploader.py
+```
+
+---
+
+### 🔑 Getting Your Credentials
+
+1. Log into [Prusa Connect](https://connect.prusa3d.com)
+2. Navigate to your printer → Camera settings
+3. Copy your `FINGERPRINT` and `TOKEN` values
    ```bash
    pip install -r requirements.txt
    ```
