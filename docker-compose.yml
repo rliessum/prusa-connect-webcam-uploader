@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  prusa-webcam-uploader:
+    build: .
+    container_name: prusa-webcam-uploader
+    restart: unless-stopped
+    
+    # Environment variables - REQUIRED: Set your actual values
+    environment:
+      - HTTP_URL=https://webcam.connect.prusa3d.com/c/snapshot
+      - FINGERPRINT=your_fingerprint_here  # REQUIRED: Replace with your actual fingerprint
+      - TOKEN=your_token_here              # REQUIRED: Replace with your actual token
+      - CAPTURE_METHOD=http                # 'http' for mjpeg-streamer or 'rtsp' for RTSP stream
+      - DELAY_SECONDS=10
+      - LONG_DELAY_SECONDS=60
+      - SNAPSHOT_URL=http://host.docker.internal:8080/?action=snapshot  # Used when CAPTURE_METHOD=http
+      - RTSP_URL=rtsp://192.168.1.100:554/stream  # Used when CAPTURE_METHOD=rtsp (example URL)
+      - RTSP_TIMEOUT=10                    # RTSP connection timeout in seconds
+      - PING_HOST=host.docker.internal
+      - MAX_RETRIES=3
+      - TIMEOUT=30
+    
+    # Network configuration to access host services
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    
+    # Optional: Mount volume for logs
+    volumes:
+      - ./logs:/app/logs
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.1'
+        reservations:
+          memory: 64M
