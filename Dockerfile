@@ -23,13 +23,10 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     wget \
     curl \
-    libgl1-mesa-glx \
     libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    libgomp1 \
-    libgthread-2.0-0 \
+    libgtk-3-dev \
+    python3-dev \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 

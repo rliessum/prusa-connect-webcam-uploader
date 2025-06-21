@@ -14,6 +14,12 @@ import pytest
 import psutil
 import os
 
+# Try to import OpenCV, use mock if not available
+try:
+    import cv2
+except ImportError:
+    from test_cv2_mock import cv2
+
 import sys
 sys.path.insert(0, str(Path(__file__).parent))
 
