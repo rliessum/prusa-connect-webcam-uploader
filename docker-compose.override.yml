@@ -1,0 +1,65 @@
+version: '3.8'
+
+# Override configuration for local development
+# This file extends docker-compose.yml with development-specific settings
+# Use: docker-compose up -d (automatically uses this override)
+
+services:
+  prusa-webcam-uploader:
+    # Build from local source for development
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Development environment variables
+    environment:
+      - PYTHONLOGLEVEL=DEBUG
+      - DELAY_SECONDS=5  # Faster for testing
+      - LONG_DELAY_SECONDS=10  # Shorter delays for testing
+    
+    # Mount local directories for development
+    volumes:
+      # Mount source code for live editing (uncomment for development)
+      # - ./prusa_webcam_uploader.py:/app/prusa_webcam_uploader.py:ro
+      
+      # Mount local logs directory instead of named volume
+      - ./logs:/app/logs
+      
+      # Timezone files
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    
+    # Enable TTY for better logging
+    tty: true
+    stdin_open: true
+    
+    # Development resource limits (more permissive)
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.2'
+    
+    # More frequent health checks for development
+    healthcheck:
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    
+    # Development-specific labels
+    labels:
+      - "com.docker.compose.project=prusa-webcam-uploader-dev"
+      - "environment=development"
+
+# Override volumes for development
+volumes:
+  prusa-logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./logs 

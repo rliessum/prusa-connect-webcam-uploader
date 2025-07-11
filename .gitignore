@@ -192,3 +192,219 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# ================================
+# Prusa Connect Webcam Uploader Specific
+# ================================
+
+# Environment files (contain sensitive credentials)
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+
+# Configuration templates (keep .env.template but ignore actual configs)
+.env.*
+!.env.template
+!portainer-env.template
+
+# Log files
+logs/
+*.log
+*.log.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+docker-compose.*.yml
+!docker-compose.yml
+!docker-compose.portainer.yml
+
+# Docker build artifacts
+.docker/
+
+# Netlify
+.netlify/
+
+# ================================
+# Development and IDE
+# ================================
+
+# PyCharm
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ================================
+# Testing and Coverage
+# ================================
+
+# Test artifacts
+test-results/
+coverage/
+.coverage
+.pytest_cache/
+.tox/
+.nox/
+
+# ================================
+# Build and Distribution
+# ================================
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Node.js (if any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ================================
+# Security and Secrets
+# ================================
+
+# SSH keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Certificates
+*.crt
+*.cer
+*.der
+
+# API keys and secrets
+secrets/
+.secrets
+*.secret
+
+# ================================
+# Backup and Archive
+# ================================
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+
+# Archive files
+*.tar
+*.tar.gz
+*.tar.bz2
+*.zip
+*.rar
+*.7z
+
+# ================================
+# Runtime and Temporary
+# ================================
+
+# Runtime directories
+run/
+runtime/
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# ================================
+# Documentation Build
+# ================================
+
+# Sphinx
+docs/_build/
+docs/build/
+
+# MkDocs
+site/
+
+# ================================
+# Monitoring and Debugging
+# ================================
+
+# Debug files
+*.debug
+debug/
+
+# Profiling
+*.prof
+*.profile
+
+# Memory dumps
+*.dump
+*.dmp
+
+# ================================
+# Local Development
+# ================================
+
+# Local configuration overrides
+local_config.py
+local_settings.py
+
+# Development databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Local cache
+.cache/
+cache/

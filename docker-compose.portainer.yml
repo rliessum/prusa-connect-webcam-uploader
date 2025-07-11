@@ -1,0 +1,113 @@
+version: '3.8'
+
+# Portainer Stack for Prusa Connect Webcam Uploader
+# This file is optimized for deployment through Portainer Stacks
+# Simply copy the content and create a new stack in Portainer
+
+services:
+  prusa-webcam-uploader:
+    image: rliessum/prusa-webcam-uploader:latest
+    container_name: prusa-webcam-uploader
+    restart: unless-stopped
+    
+    # Portainer-specific labels for access control and UI
+    labels:
+      - "io.portainer.accesscontrol.teams=administrators"
+      - "com.docker.compose.service=prusa-webcam-uploader"
+      - "org.label-schema.name=Prusa Connect Webcam Uploader"
+      - "org.label-schema.description=Upload webcam snapshots to Prusa Connect via HTTP or RTSP"
+      - "org.label-schema.version=1.0.0"
+      - "org.label-schema.vendor=Prusa Research"
+      - "traefik.enable=false"
+    
+    # Environment variables with Portainer-friendly defaults
+    # Configure these through Portainer's environment variables section
+    environment:
+      # 🔑 REQUIRED: Prusa Connect credentials (set these in Portainer!)
+      - FINGERPRINT=${FINGERPRINT}
+      - TOKEN=${TOKEN}
+      
+      # 📷 Capture method: 'http' for mjpeg-streamer or 'rtsp' for IP cameras
+      - CAPTURE_METHOD=${CAPTURE_METHOD:-rtsp}
+      
+      # 🌐 HTTP settings
+      - HTTP_URL=${HTTP_URL:-https://webcam.connect.prusa3d.com/c/snapshot}
+      - SNAPSHOT_URL=${SNAPSHOT_URL:-http://host.docker.internal:8080/?action=snapshot}
+      
+      # 📹 RTSP settings (for IP cameras)
+      - RTSP_URL=${RTSP_URL}
+      - RTSP_TIMEOUT=${RTSP_TIMEOUT:-10}
+      
+      # 🔗 Network connectivity
+      - PING_HOST=${PING_HOST:-192.168.1.100}
+      
+      # ⏱️ Timing configuration
+      - DELAY_SECONDS=${DELAY_SECONDS:-10}
+      - LONG_DELAY_SECONDS=${LONG_DELAY_SECONDS:-60}
+      - TIMEOUT=${TIMEOUT:-30}
+      - MAX_RETRIES=${MAX_RETRIES:-3}
+      
+      # 🐛 Debug settings
+      - PYTHONLOGLEVEL=${PYTHONLOGLEVEL:-INFO}
+    
+    # Network configuration
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    
+    # Volume configuration for logs and timezone
+    volumes:
+      - prusa-webcam-logs:/app/logs
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    
+    # Security configuration
+    user: "1000:1000"
+    tmpfs:
+      - /tmp:noexec,nosuid,size=10m
+    
+    # Resource management
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+      restart_policy:
+        condition: unless-stopped
+        delay: 5s
+        max_attempts: 5
+    
+    # Health monitoring
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys, os; sys.exit(0 if os.getenv('FINGERPRINT', '') != '' else 1)"]
+      interval: 60s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Persistent volumes
+volumes:
+  prusa-webcam-logs:
+    driver: local
+    labels:
+      - "com.docker.compose.volume=prusa-webcam-logs"
+      - "org.label-schema.name=Prusa Webcam Uploader Logs"
+
+# Example environment variables for Portainer:
+# Copy these to the "Environment variables" section in Portainer Stack editor:
+#
+# FINGERPRINT=your_actual_fingerprint_here
+# TOKEN=your_actual_token_here
+# CAPTURE_METHOD=rtsp
+# RTSP_URL=rtsp://admin:password@192.168.1.100:554/stream
+# PING_HOST=192.168.1.100
+# DELAY_SECONDS=10 

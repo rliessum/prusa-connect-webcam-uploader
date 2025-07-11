@@ -1,0 +1,102 @@
+# Prusa Connect Webcam Uploader Configuration Template
+# Copy this file to .env and edit with your actual values
+# Or use these variables in Portainer's environment section
+
+# ================================
+# REQUIRED CONFIGURATION
+# ================================
+
+# 🔑 Your Prusa Connect credentials (REQUIRED)
+# Get these from: https://connect.prusa3d.com → Your Printer → Camera Settings
+FINGERPRINT=your_fingerprint_here
+TOKEN=your_token_here
+
+# ================================
+# CAPTURE CONFIGURATION
+# ================================
+
+# 📷 Capture method: 'http' for mjpeg-streamer or 'rtsp' for IP cameras
+CAPTURE_METHOD=rtsp
+
+# 🌐 Prusa Connect upload URL (usually don't change this)
+HTTP_URL=https://webcam.connect.prusa3d.com/c/snapshot
+
+# ================================
+# HTTP CAPTURE SETTINGS
+# (Only needed when CAPTURE_METHOD=http)
+# ================================
+
+# 📸 mjpeg-streamer snapshot URL
+SNAPSHOT_URL=http://host.docker.internal:8080/?action=snapshot
+
+# ================================
+# RTSP CAPTURE SETTINGS
+# (Only needed when CAPTURE_METHOD=rtsp)
+# ================================
+
+# 📹 Your IP camera RTSP URL
+# Examples:
+#   Generic IP camera: rtsp://username:password@192.168.1.100:554/stream
+#   Hikvision: rtsp://admin:password@192.168.1.100:554/Streaming/Channels/101
+#   Dahua: rtsp://admin:password@192.168.1.100:554/cam/realmonitor?channel=1&subtype=0
+#   TP-Link: rtsp://admin:password@192.168.1.100:554/stream1
+RTSP_URL=rtsp://admin:password@192.168.1.100:554/stream
+
+# ⏱️ RTSP connection timeout in seconds
+RTSP_TIMEOUT=10
+
+# ================================
+# NETWORK CONFIGURATION
+# ================================
+
+# 🔗 Host to ping for connectivity check
+# Use your printer's IP address or camera IP
+PING_HOST=192.168.1.100
+
+# ================================
+# TIMING CONFIGURATION
+# ================================
+
+# ⏱️ Normal delay between uploads (seconds)
+DELAY_SECONDS=10
+
+# ⏱️ Delay after errors before retry (seconds)
+LONG_DELAY_SECONDS=60
+
+# ⏱️ HTTP request timeout (seconds)
+TIMEOUT=30
+
+# 🔄 Maximum number of retries for failed uploads
+MAX_RETRIES=3
+
+# ================================
+# DEBUG CONFIGURATION
+# ================================
+
+# 🐛 Python logging level (DEBUG, INFO, WARNING, ERROR)
+PYTHONLOGLEVEL=INFO
+
+# ================================
+# PORTAINER DEPLOYMENT EXAMPLES
+# ================================
+
+# Example 1: RTSP IP Camera
+# FINGERPRINT=abcd1234...
+# TOKEN=xyz789...
+# CAPTURE_METHOD=rtsp
+# RTSP_URL=rtsp://admin:mypassword@192.168.1.150:554/stream
+# PING_HOST=192.168.1.150
+
+# Example 2: mjpeg-streamer on Raspberry Pi
+# FINGERPRINT=abcd1234...
+# TOKEN=xyz789...
+# CAPTURE_METHOD=http
+# SNAPSHOT_URL=http://192.168.1.200:8080/?action=snapshot
+# PING_HOST=192.168.1.200
+
+# Example 3: Local mjpeg-streamer (same machine as Docker)
+# FINGERPRINT=abcd1234...
+# TOKEN=xyz789...
+# CAPTURE_METHOD=http
+# SNAPSHOT_URL=http://host.docker.internal:8080/?action=snapshot
+# PING_HOST=host.docker.internal 
