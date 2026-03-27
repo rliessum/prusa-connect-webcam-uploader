@@ -87,7 +87,7 @@ dev: ## dev - Run application in development mode
 .PHONY: check
 check: ## dev - Run all code quality checks
 	@echo "$(BLUE)🧹 Running code quality checks...$(RESET)"
-	./dev_check.sh
+	python run_tests.py --lint-only
 
 .PHONY: format
 format: ## dev - Format code with black and isort
@@ -115,22 +115,22 @@ security: ## dev - Run security check with bandit
 .PHONY: test
 test: ## test - Run all tests
 	@echo "$(BLUE)🧪 Running test suite...$(RESET)"
-	./run_tests.sh
+	python run_tests.py
 
 .PHONY: test-unit
 test-unit: ## test - Run unit tests only
 	@echo "$(BLUE)🧪 Running unit tests...$(RESET)"
-	pytest test_prusa_webcam_uploader.py -v
+	python run_tests.py --quick
 
 .PHONY: test-performance
 test-performance: ## test - Run performance tests
 	@echo "$(BLUE)📊 Running performance tests...$(RESET)"
-	pytest test_performance.py -v
+	python run_tests.py --perf-only
 
 .PHONY: test-coverage
 test-coverage: ## test - Run tests with coverage report
 	@echo "$(BLUE)📊 Running tests with coverage...$(RESET)"
-	pytest --cov=prusa_webcam_uploader --cov-report=html --cov-report=term-missing
+	python run_tests.py --coverage
 	@echo "$(GREEN)✅ Coverage report generated in htmlcov/index.html$(RESET)"
 
 .PHONY: test-watch

@@ -183,13 +183,21 @@ The application is configured via environment variables:
 
 ## Docker Deployment
 
-### Building the Image
+### Quick Start with Docker Compose
 
 ```bash
-docker build -t prusa-webcam-uploader .
+# Configure credentials
+cp .env.template .env
+# Edit .env with your Prusa Connect credentials
+
+# Deploy
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
 ```
 
-### Running with Docker
+### Manual Docker Run
 
 ```bash
 docker run -d \
@@ -199,29 +207,89 @@ docker run -d \
   -e TOKEN="your_token" \
   -e CAPTURE_METHOD="http" \
   -e SNAPSHOT_URL="http://host.docker.internal:8080/?action=snapshot" \
-  -e PING_HOST="host.docker.internal" \
   --add-host=host.docker.internal:host-gateway \
-  prusa-webcam-uploader
+  rliessum/prusa-webcam-uploader:latest
 ```
 
-**For RTSP streams:**
+📖 **For detailed deployment scenarios, see [Deployment Guide](docs/deployment-guide.md)**
+
+## Unraid NAS Deployment
+
+### Option 1: Docker Compose (Recommended)
+
+If you have the **Docker Compose** plugin installed on Unraid:
+
+**Step 1:** Clone the repository to your Unraid server
 ```bash
-docker run -d \
-  --name prusa-webcam-uploader \
-  --restart unless-stopped \
-  -e FINGERPRINT="your_fingerprint" \
-  -e TOKEN="your_token" \
-  -e CAPTURE_METHOD="rtsp" \
-  -e RTSP_URL="rtsp://192.168.1.100:554/stream" \
-  -e PING_HOST="192.168.1.100" \
-  prusa-webcam-uploader
+cd /mnt/user/appdata
+git clone https://github.com/rliessum/prusa-connect-webcam-uploader.git
+cd prusa-connect-webcam-uploader
 ```
 
-### Using Docker Compose
+**Step 2:** Create your `.env` file
+```bash
+cp .env.template .env
+# Edit .env with your Prusa Connect credentials
+nano .env
+```
 
-1. Copy the provided `docker-compose.yml`
-2. Edit environment variables
-3. Run: `docker-compose up -d`
+**Step 3:** Build and start
+```bash
+docker compose up -d --build
+```
+
+**Step 4:** Check logs
+```bash
+docker compose logs -f prusa-webcam-uploader
+```
+
+### Option 2: Unraid Docker UI
+
+For users who prefer the Unraid web interface:
+
+1. Open the Unraid web UI and go to **Docker** → **Add Container**
+2. Fill in the following fields:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `prusa-webcam-uploader` |
+| **Repository** | Build locally (see below) or `rliessum/prusa-webcam-uploader:latest` |
+| **Network Type** | `bridge` |
+| **Extra Parameters** | `--restart unless-stopped` |
+
+3. Add the following environment variables (click **Add another Path, Port, Variable, Label or Device**):
+
+| Variable | Value |
+|----------|-------|
+| `FINGERPRINT` | Your Prusa Connect fingerprint |
+| `TOKEN` | Your Prusa Connect token |
+| `CAPTURE_METHOD` | `http` or `rtsp` |
+| `SNAPSHOT_URL` | `http://<YOUR_UNRAID_IP>:8080/?action=snapshot` (for HTTP) |
+| `RTSP_URL` | `rtsp://user:pass@camera-ip:554/stream` (for RTSP) |
+| `PING_HOST` | Your printer's IP address |
+| `DELAY_SECONDS` | `10` |
+
+4. Click **Apply** to create the container.
+
+#### Building Locally on Unraid
+
+If the image is not published to Docker Hub, build it on your Unraid server:
+
+```bash
+cd /mnt/user/appdata
+git clone https://github.com/rliessum/prusa-connect-webcam-uploader.git
+cd prusa-connect-webcam-uploader
+docker build -t rliessum/prusa-webcam-uploader:latest .
+```
+
+Then use `rliessum/prusa-webcam-uploader:latest` as the repository in the Unraid Docker UI.
+
+### Unraid Tips
+
+- **Appdata path**: Store config and logs under `/mnt/user/appdata/prusa-webcam-uploader/`
+- **Networking**: Use `bridge` mode. If your webcam/printer is on the local network, use the device's IP address directly instead of `host.docker.internal`
+- **RTSP cameras**: Most IP cameras on your LAN work out of the box — just use the camera's IP in `RTSP_URL`
+- **Logs**: Mount a volume for logs: `/mnt/user/appdata/prusa-webcam-uploader/logs:/app/logs`
 
 ## Getting Your Prusa Connect Credentials
 
@@ -272,17 +340,19 @@ export RTSP_TIMEOUT=10  # Connection timeout in seconds
 
 ## Development and Testing
 
-### Running Tests
-
-The project includes a comprehensive test suite with unit tests, integration tests, and performance tests.
-
-#### Quick Test Run
+### Quick Test Run
 ```bash
-# Using the provided test script
-./run_tests.sh
+# Run all tests
+python run_tests.py
+
+# Quick tests (skip slow ones)
+python run_tests.py --quick
+
+# With coverage report
+python run_tests.py --coverage
 ```
 
-#### Manual Test Setup
+### Development Setup
 ```bash
 # Create virtual environment
 python3 -m venv venv
@@ -292,47 +362,11 @@ source venv/bin/activate
 pip install -r requirements.txt
 pip install -r test_requirements.txt
 
-# Run all tests
-pytest
-
-# Run specific test categories
-pytest test_prusa_webcam_uploader.py -v          # Unit tests
-pytest test_performance.py -v                    # Performance tests
-pytest -m "not slow"                            # Skip slow tests
-pytest --cov=prusa_webcam_uploader              # With coverage
+# Run comprehensive checks
+python run_tests.py --coverage
 ```
 
-#### Test Categories
-
-- **Unit Tests**: Test individual components and methods
-- **Integration Tests**: Test end-to-end functionality
-- **Performance Tests**: Test memory usage and performance characteristics
-- **Stress Tests**: Test behavior under load and error conditions
-
-#### Coverage Reports
-
-Test coverage reports are generated in HTML format:
-```bash
-pytest --cov=prusa_webcam_uploader --cov-report=html
-open htmlcov/index.html  # View coverage report
-```
-
-### Code Quality
-
-The project uses several tools to maintain code quality:
-
-- **pytest**: Test framework with fixtures and parametrization
-- **flake8**: Code style and error checking
-- **mypy**: Static type checking
-- **coverage**: Test coverage measurement
-
-### Continuous Integration
-
-GitHub Actions automatically run tests on:
-- Python 3.8, 3.9, 3.10, 3.11
-- Ubuntu latest
-- Docker container builds
-- Code coverage reporting
+📖 **For detailed development information, see [Contributing Guide](CONTRIBUTING.md)**
 
 ## Monitoring and Logging
 

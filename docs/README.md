@@ -27,10 +27,10 @@
 ### 🛠️ Deployment Guides
 | Guide | Description | Complexity |
 |-------|-------------|-----------|
-| [🐋 Docker Examples](docker-examples.md) | Complete Docker deployment scenarios | ⭐⭐ |
-| [📱 Raspberry Pi](docker-examples.md#raspberry-pi-deployment) | Deploy on Raspberry Pi | ⭐⭐⭐ |
-| [☸️ Kubernetes](../README.md) | Container orchestration (coming soon) | ⭐⭐⭐⭐ |
-| [☁️ Cloud Deployment](../README.md) | AWS/GCP deployment (coming soon) | ⭐⭐⭐⭐ |
+| [🚀 Deployment Guide](deployment-guide.md) | Complete deployment scenarios | ⭐⭐ |
+| [🐋 Docker Examples](docker-examples.md) | Advanced Docker configurations | ⭐⭐⭐ |
+| [📱 Portainer Deployment](portainer-deployment.yml) | Portainer stack configuration | ⭐⭐ |
+| [🔧 Development Setup](development-override.yml) | Development environment | ⭐⭐ |
 
 ### 🎥 Camera Configuration
 | Guide | Description | Use Case |

@@ -1,31 +1,43 @@
-# Version control
+# Git
 .git
 .gitignore
 
-# Environment files (contain secrets)
+# Documentation
+README.md
+CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
+LICENSE
+docs/
+
+# Development files
 .env
 .env.*
 !.env.template
-!.env.example
-
-# Documentation
-README.md
-*.md
+logs/
+tmp/
+temp/
 
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
 .Python
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+*.egg-info/
 .pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
 
-# IDEs
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# IDE
 .vscode/
 .idea/
 *.swp
@@ -36,17 +48,31 @@ venv.bak/
 .DS_Store
 Thumbs.db
 
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github/
+
+# Testing
+test_*.py
+pytest.ini
+test_requirements.txt
+run_tests.sh
+test_runner.py
+dev_check.sh
+
+# Build artifacts
+build/
+dist/
+*.egg
+*.tar.gz
+
 # Logs
 *.log
 logs/
-
-# Original bash script
-*.sh
-
-# Docker
-docker-compose.yml
-Dockerfile
-.dockerignore
 
 # Temporary files
 *.tmp
